@@ -5,41 +5,40 @@
 #include "sel.h"
 #include "display_tools.h"
 
-using namespace std;
-
-int main(void)
+int main()
 {
-    vector<Matrix> localks;
+    vector<Matrix> localKs;
     vector<Vector> localbs;
 
     Matrix K;
     Vector b;
     Vector T;
 
-    cout << "IMPLEMENTACION DEL METODO DE LOS ELEMENTOS FINITOS" << endl;
-    cout << "\t-TRANSFERENCIA DE CALOR EN 1D" << endl;
-    cout << "\t-FUNCIONES DE FORMA LINEAL" << endl;
-    cout << "\t-PESO DE GALERKIN" << endl;
-    cout << "***********************************************************************" << endl;
+    cout << "IMPLEMENTACION DEL METODO DE LOS ELEMENTOS FINITOS\n"
+         << "\t- TRANSFERENCIA DE CALOR\n"
+         << "\t- 1 DIMENSION\n"
+         << "\t- FUNCIONES DE FORMA LINEALES\n"
+         << "\t- PESOS DE GALERKIN\n"
+         << "*********************************************************************************\n\n";
 
     mesh m;
     leerMallayCondiciones(m);
 
-    createLocalSystem(m, localks, localbs);
+    crearSistemasLocales(m, localKs, localbs);
 
     zeroes(K, m.getSize(NODES));
     zeroes(b, m.getSize(NODES));
-    assembly(m, localks, localbs, K, b);
+
+    ensamblaje(m, localKs, localbs, K, b);
 
     applyNeumann(m, b);
+
     applyDirichlet(m, K, b);
     zeroes(T, b.size());
-
     calculate(K, b, T);
 
-    cout << "LA RESPUESTA ES: " << endl;
-
+    cout << "LA RESPUESTA: \n";
     showVector(T);
 
     return 0;
-};
+}

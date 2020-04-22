@@ -1,16 +1,12 @@
 #include <fstream>
 
-using namespace std;
-
-void obtenerDatos(ifstream &file, int nlines, int n, int mode, item *item_list)
+void obtenerDatos(istream &file, int nlines, int n, int mode, item *item_list)
 {
     string line;
     file >> line;
 
     if (nlines == DOUBLELINE)
-    {
         file >> line;
-    }
 
     for (int i = 0; i < n; i++)
     {
@@ -18,9 +14,9 @@ void obtenerDatos(ifstream &file, int nlines, int n, int mode, item *item_list)
         {
         case INT_FLOAT:
             int e;
-            float f;
-            file >> e >> f;
-            item_list[i].setIntFloat(e, f);
+            float r;
+            file >> e >> r;
+            item_list[i].setIntFloat(e, r);
             break;
         case INT_INT_INT:
             int e1, e2, e3;
@@ -35,29 +31,29 @@ void leerMallayCondiciones(mesh &m)
 {
     char filename[10];
     ifstream file;
-    float k, Q;
+    float k, Q, E, A;
     int nnodes, neltos, ndirich, nneu;
 
     do
     {
-        cout << "Ingrese nombre del archivo que tiene la malla: ";
+        cout << "Ingrese el nombre del archivo que contiene los datos de la malla: ";
         cin >> filename;
         file.open(filename);
     } while (!file);
 
-    file >> k >> Q;
+    file >> E >> A >> Q;
     file >> nnodes >> neltos >> ndirich >> nneu;
+
+    k = E * A;
 
     m.setParameters(k, Q);
     m.setSizes(nnodes, neltos, ndirich, nneu);
     m.createData();
 
-    //Obteniendo datos
     obtenerDatos(file, SINGLELINE, nnodes, INT_FLOAT, m.getNodes());
     obtenerDatos(file, DOUBLELINE, neltos, INT_INT_INT, m.getElements());
     obtenerDatos(file, DOUBLELINE, ndirich, INT_FLOAT, m.getDirichlet());
     obtenerDatos(file, DOUBLELINE, nneu, INT_FLOAT, m.getNeumann());
 
-    //Cerrando el flujo del archivo
     file.close();
 }
