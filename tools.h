@@ -5,16 +5,16 @@ using namespace std;
 void obtenerDatos(ifstream &file, int nlines, int n, int mode, item *item_list)
 {
     string line;
-    file << line;
+    file >> line;
 
     if (nlines == DOUBLELINE)
     {
-        file << line;
+        file >> line;
     }
 
     for (int i = 0; i < n; i++)
     {
-        switch (nodes)
+        switch (mode)
         {
         case INT_FLOAT:
             int e;
@@ -23,8 +23,7 @@ void obtenerDatos(ifstream &file, int nlines, int n, int mode, item *item_list)
             item_list[i].setIntFloat(e, f);
             break;
         case INT_INT_INT:
-            int e1;
-            int e2, int e3;
+            int e1, e2, e3;
             file >> e1 >> e2 >> e3;
             item_list[i].setIntIntInt(e1, e2, e3);
             break;
@@ -49,15 +48,15 @@ void leerMallayCondiciones(mesh &m)
     file >> k >> Q;
     file >> nnodes >> neltos >> ndirich >> nneu;
 
-    m.Parameters(k, Q);
+    m.setParameters(k, Q);
     m.setSizes(nnodes, neltos, ndirich, nneu);
     m.createData();
 
     //Obteniendo datos
-    obtenerDatos(file, SINGLELINE, nnodes, INT_FLOAT, mgetNodes());
-    obtenerDatos(file, DOUBLELINE, neltos, INT_INT_INT, mgetElements());
-    obtenerDatos(file, DOUBLELINE, ndirich, INT_FLOAT, mgetDirichlet());
-    obtenerDatos(file, DOUBLELINE, nneu, INT_FLOAT, mgetNeumann());
+    obtenerDatos(file, SINGLELINE, nnodes, INT_FLOAT, m.getNodes());
+    obtenerDatos(file, DOUBLELINE, neltos, INT_INT_INT, m.getElements());
+    obtenerDatos(file, DOUBLELINE, ndirich, INT_FLOAT, m.getDirichlet());
+    obtenerDatos(file, DOUBLELINE, nneu, INT_FLOAT, m.getNeumann());
 
     //Cerrando el flujo del archivo
     file.close();
