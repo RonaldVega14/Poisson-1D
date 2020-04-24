@@ -44,7 +44,7 @@ void leerMallayCondiciones(mesh &m)
     file >> E >> A >> Q;
     file >> nnodes >> neltos >> ndirich >> nneu;
 
-    k = E * A * (1 / 2);
+    k = E * A;
 
     m.setParameters(k, Q);
     m.setSizes(nnodes, neltos, ndirich, nneu);

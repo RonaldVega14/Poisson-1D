@@ -155,7 +155,6 @@ void inverseMatrix(Matrix M, Matrix &Minv)
 {
     Matrix Cof, Adj;
     float det = determinant(M);
-    cout << "Determinante" << endl;
     if (det == 0)
     {
         cout << "Determinante = 0";

@@ -37,7 +37,7 @@ int main()
     zeroes(T, b.size());
     calculate(K, b, T);
 
-    cout << "LA RESPUESTA: \n";
+    cout << "LA RESPUESTA ES: \n";
     showVector(T);
 
     return 0;
