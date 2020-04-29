@@ -27,12 +27,46 @@ void obtenerDatos(istream &file, int nlines, int n, int mode, item *item_list)
     }
 }
 
+void updateConditionNodes(int n, condition *list, int delta)
+{
+    for (int i = 0; i < n; i++)
+    {
+        list[i].setNode1(list[i].getNode1() + delta);
+    }
+}
+
+void joinConditions(condition *list, int n1, int n2, condition *list1, condition *list2)
+{
+    int i;
+    for (i = 0; i < n1; i++)
+        list[i] = list1[i];
+    for (int j = 0; j < n2; j++)
+    {
+        list[i] = list2[j];
+        i++;
+    }
+}
+
+void correctConditions(int n, condition *list)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        int pivot = list[i].getNode1();
+        for (int j = i; j < n; j++)
+            if (list[j].getNode1() > pivot)
+                list[j].setNode1(list[i].getNode1() - 1);
+    }
+}
+
 void leerMallayCondiciones(mesh &m)
 {
-    char filename[10];
+    char filename[14];
     ifstream file;
-    float k, Q, E, A;
-    int nnodes, neltos, ndirich, nneu;
+    float l, u_bar, nu, rho, f;
+    int nnodes, neltos, ndirich_u, ndirich_p;
+
+    condition *dirichlet_u_list;
+    condition *dirichlet_p_list;
 
     do
     {
@@ -41,19 +75,24 @@ void leerMallayCondiciones(mesh &m)
         file.open(filename);
     } while (!file);
 
-    file >> E >> A >> Q;
-    file >> nnodes >> neltos >> ndirich >> nneu;
+    file >> l >> u_bar >> nu >> rho >> f;
+    file >> nnodes >> neltos >> ndirich_u >> ndirich_p;
 
-    k = E * A;
-
-    m.setParameters(k, Q);
-    m.setSizes(nnodes, neltos, ndirich, nneu);
+    m.setParameters(l, u_bar, nu, rho, f);
+    m.setSizes(nnodes, neltos, ndirich_u + ndirich_p);
     m.createData();
+
+    dirichlet_u_list = new condition[ndirich_u];
+    dirichlet_p_list = new condition[ndirich_p];
 
     obtenerDatos(file, SINGLELINE, nnodes, INT_FLOAT, m.getNodes());
     obtenerDatos(file, DOUBLELINE, neltos, INT_INT_INT, m.getElements());
-    obtenerDatos(file, DOUBLELINE, ndirich, INT_FLOAT, m.getDirichlet());
-    obtenerDatos(file, DOUBLELINE, nneu, INT_FLOAT, m.getNeumann());
+    obtenerDatos(file, DOUBLELINE, ndirich_u, INT_FLOAT, dirichlet_u_list);
+    obtenerDatos(file, DOUBLELINE, ndirich_p, INT_FLOAT, dirichlet_p_list);
 
     file.close();
+
+    updateConditionNodes(ndirich_p, dirichlet_p_list, nnodes);
+    joinConditions(m.getDirichlet(), ndirich_u, ndirich_p, dirichlet_u_list, dirichlet_p_list);
+    correctConditions(ndirich_u + ndirich_p, m.getDirichlet());
 }

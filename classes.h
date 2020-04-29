@@ -12,15 +12,17 @@ enum modes
 };
 enum parameters
 {
-    THERMAL_CONDUCTIVITY,
-    HEAT_SOURCE
+    ELEMENT_LENGTH,
+    ADJECTIVE_VELOCITY,
+    DYNAMIC_VISCOSITY,
+    DENSITY,
+    EXTERNAL_FORCE
 };
 enum sizes
 {
     NODES,
     ELEMENTS,
-    DIRICHLET,
-    NEUMANN
+    DIRICHLET
 };
 
 class item
@@ -57,6 +59,31 @@ public:
     float getValue()
     {
         return value;
+    }
+
+    void setId(int identifier)
+    {
+        id = identifier;
+    }
+
+    void setX(float x_coord)
+    {
+        x = x_coord;
+    }
+
+    void setNode1(int nodo)
+    {
+        node1 = nodo;
+    }
+
+    void setNode2(int nodo)
+    {
+        node2 = nodo;
+    }
+
+    void setValue(float node_val)
+    {
+        value = node_val;
     }
 
     virtual void setIntFloat(int n, float r) = 0;
@@ -111,25 +138,26 @@ public:
 
 class mesh
 {
-    float parameters[2];
-    int sizes[4];
+    float parameters[5];
+    int sizes[3];
     node *node_list;
     element *element_list;
     condition *dirichlet_list;
-    condition *neumann_list;
 
 public:
-    void setParameters(float k, float Q)
+    void setParameters(float l, float u_bar, float nu, float rho, float f)
     {
-        parameters[THERMAL_CONDUCTIVITY] = k;
-        parameters[HEAT_SOURCE] = Q;
+        parameters[ELEMENT_LENGTH] = l;
+        parameters[ADJECTIVE_VELOCITY] = u_bar;
+        parameters[DYNAMIC_VISCOSITY] = nu;
+        parameters[DENSITY] = rho;
+        parameters[EXTERNAL_FORCE] = f;
     }
-    void setSizes(int nnodes, int neltos, int ndirich, int nneu)
+    void setSizes(int nnodes, int neltos, int ndirich)
     {
         sizes[NODES] = nnodes;
         sizes[ELEMENTS] = neltos;
         sizes[DIRICHLET] = ndirich;
-        sizes[NEUMANN] = nneu;
     }
     int getSize(int s)
     {
@@ -144,7 +172,6 @@ public:
         node_list = new node[sizes[NODES]];
         element_list = new element[sizes[ELEMENTS]];
         dirichlet_list = new condition[sizes[DIRICHLET]];
-        neumann_list = new condition[sizes[NEUMANN]];
     }
     node *getNodes()
     {
@@ -158,10 +185,10 @@ public:
     {
         return dirichlet_list;
     }
-    condition *getNeumann()
-    {
-        return neumann_list;
-    }
+    // condition *getNeumann()
+    // {
+    //     return neumann_list;
+    // }
     node getNode(int i)
     {
         return node_list[i];
@@ -174,7 +201,7 @@ public:
     {
         if (type == DIRICHLET)
             return dirichlet_list[i];
-        else
-            return neumann_list[i];
+        // else
+        //     return neumann_list[i];
     }
 };
