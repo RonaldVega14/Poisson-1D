@@ -54,7 +54,7 @@ void correctConditions(int n, condition *list)
         int pivot = list[i].getNode1();
         for (int j = i; j < n; j++)
             if (list[j].getNode1() > pivot)
-                list[j].setNode1(list[i].getNode1() - 1);
+                list[j].setNode1(list[j].getNode1() - 1);
     }
 }
 
