@@ -14,9 +14,9 @@ int main()
     Vector b;
     Vector T;
 
-    cout << "IMPLEMENTACI" << char(224) << "N DEL M" << char(144) << "TODO DE LOS ELEMENTOS FINITOS\n"
+    cout << "IMPLEMENTACION DEL METODO DE LOS ELEMENTOS FINITOS\n"
          << "\t- ECUACIONES DE NAVIER-STOKES\n"
-         << "\t- 1 DIMENSI" << char(224) << "N\n"
+         << "\t- 1 DIMENSION\n"
          << "\t- FUNCIONES DE FORMA LINEALES\n"
          << "\t- PESOS DE GALERKIN\n"
          << "*********************************************************************************\n\n";
@@ -26,18 +26,21 @@ int main()
 
     crearSistemasLocales(m, localKs, localbs);
 
-    zeroes(K, m.getSize(NODES));
-    zeroes(b, m.getSize(NODES));
+    zeroes(K, m.getSize(NODES) * 2);
+    zeroes(b, m.getSize(NODES) * 2);
 
     ensamblaje(m, localKs, localbs, K, b);
 
     applyDirichlet(m, K, b);
+
+    showMatrix(K);
 
     zeroes(T, b.size());
 
     calculate(K, b, T);
 
     cout << "LA RESPUESTA ES: \n";
+
     showVector(T);
 
     return 0;

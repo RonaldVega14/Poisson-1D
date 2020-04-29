@@ -185,10 +185,6 @@ public:
     {
         return dirichlet_list;
     }
-    // condition *getNeumann()
-    // {
-    //     return neumann_list;
-    // }
     node getNode(int i)
     {
         return node_list[i];
@@ -201,7 +197,5 @@ public:
     {
         if (type == DIRICHLET)
             return dirichlet_list[i];
-        // else
-        //     return neumann_list[i];
     }
 };
