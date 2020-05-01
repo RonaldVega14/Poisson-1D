@@ -1,6 +1,6 @@
 void createLocalA(Matrix &A, mesh m)
 {
-    float t = m.getParameter(VARIABLE_T);
+    float t = m.getParameter(PI);
     A.at(0).at(0) += -t / 8;
     A.at(0).at(1) += t / 8;
     A.at(1).at(0) += -t / 8;
@@ -10,7 +10,7 @@ void createLocalA(Matrix &A, mesh m)
 void createLocalB(Matrix &B, mesh m)
 {
     float l = m.getParameter(ELEMENT_LENGTH);
-    float k = m.getParameter(VARIABLE_K);
+    float k = m.getParameter(KAPPA);
     B.at(0).at(0) += k / l;
     B.at(0).at(1) += -k / l;
     B.at(1).at(0) += -k / l;
@@ -19,7 +19,7 @@ void createLocalB(Matrix &B, mesh m)
 
 void createLocalC(Matrix &C, mesh m)
 {
-    float lambda = m.getParameter(VARIABLE_L);
+    float lambda = m.getParameter(LAMBDA);
     C.at(0).at(0) += -lambda / 3;
     C.at(0).at(1) += lambda / 3;
     C.at(1).at(0) += -lambda / 3;
@@ -29,29 +29,29 @@ void createLocalC(Matrix &C, mesh m)
 void createLocalD(Matrix &D, mesh m)
 {
     float l = m.getParameter(ELEMENT_LENGTH);
-    float v = m.getParameter(VARIABLE_V);
-    D.at(0).at(0) += v / l;
-    D.at(0).at(1) += -v / l;
-    D.at(1).at(0) += -v / l;
-    D.at(1).at(1) += v / l;
+    float v = m.getParameter(IPSILON) / l;
+    D.at(0).at(0) += v;
+    D.at(0).at(1) += -v;
+    D.at(1).at(0) += -v;
+    D.at(1).at(1) += v;
 }
 
 void createLocalE(Matrix &E, mesh m)
 {
-    float alpha = m.getParameter(VARIABLE_ALPHA);
-    E.at(0).at(0) += -(3 * alpha) / 2;
-    E.at(0).at(1) += (3 * alpha) / 2;
-    E.at(1).at(0) += -(3 * alpha) / 2;
-    E.at(1).at(1) += (3 * alpha) / 2;
+    float alpha = 3 * m.getParameter(ALPHA) / 2;
+    E.at(0).at(0) += -alpha;
+    E.at(0).at(1) += alpha;
+    E.at(1).at(0) += -alpha;
+    E.at(1).at(1) += alpha;
 }
 
 void createLocalF(Matrix &F, mesh m)
 {
-    float delta = m.getParameter(VARIABLE_D);
-    F.at(0).at(0) += -delta / 2;
-    F.at(0).at(1) += delta / 2;
-    F.at(1).at(0) += -delta / 2;
-    F.at(1).at(1) += delta / 2;
+    float delta = m.getParameter(DELTA) / 2;
+    F.at(0).at(0) += -delta;
+    F.at(0).at(1) += delta;
+    F.at(1).at(0) += -delta;
+    F.at(1).at(1) += delta;
 }
 
 Matrix createLocalK(int element, mesh &m)
@@ -106,8 +106,8 @@ Vector createLocalb(int element, mesh &m)
 {
     Vector b;
 
-    float psy = m.getParameter(VARIABLE_PSY),
-          n = m.getParameter(VARIABLE_N),
+    float psy = m.getParameter(PSI),
+          n = m.getParameter(ETA),
           l = m.getParameter(ELEMENT_LENGTH);
 
     b.push_back((psy * l) / 2);
