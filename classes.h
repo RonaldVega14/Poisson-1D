@@ -13,10 +13,14 @@ enum modes
 enum parameters
 {
     ELEMENT_LENGTH,
-    ADJECTIVE_VELOCITY,
-    DYNAMIC_VISCOSITY,
-    DENSITY,
-    EXTERNAL_FORCE
+    VARIABLE_T,
+    VARIABLE_K,
+    VARIABLE_L,
+    VARIABLE_V,
+    VARIABLE_PSY,
+    VARIABLE_ALPHA,
+    VARIABLE_D,
+    VARIABLE_N
 };
 enum sizes
 {
@@ -145,13 +149,17 @@ class mesh
     condition *dirichlet_list;
 
 public:
-    void setParameters(float l, float u_bar, float nu, float rho, float f)
+    void setParameters(float l, float t, float k, float lamda, float v, float psy, float alpha, float d, float n)
     {
         parameters[ELEMENT_LENGTH] = l;
-        parameters[ADJECTIVE_VELOCITY] = u_bar;
-        parameters[DYNAMIC_VISCOSITY] = nu;
-        parameters[DENSITY] = rho;
-        parameters[EXTERNAL_FORCE] = f;
+        parameters[VARIABLE_T] = t;
+        parameters[VARIABLE_K] = k;
+        parameters[VARIABLE_L] = lamda;
+        parameters[VARIABLE_V] = v;
+        parameters[VARIABLE_PSY] = psy;
+        parameters[VARIABLE_ALPHA] = alpha;
+        parameters[VARIABLE_D] = d;
+        parameters[VARIABLE_N] = n;
     }
     void setSizes(int nnodes, int neltos, int ndirich)
     {
