@@ -76,7 +76,6 @@ void leerMallayCondiciones(mesh &m)
     } while (!file);
 
     file >> l >> t >> k >> lamda >> v_rara >> psy >> alpha >> d_rara >> n;
-    // file >> l >> pi >> kappa >> lambda >> ipsilon >> psi >> alpha >> delta >> eta;
     file >> nnodes >> neltos >> ndirich_u >> ndirich_p;
 
     m.setParameters(l, t, k, lamda, v_rara, psy, alpha, d_rara, n);

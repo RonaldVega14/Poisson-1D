@@ -19,7 +19,7 @@ void createLocalB(Matrix &B, mesh m)
 
 void createLocalC(Matrix &C, mesh m)
 {
-    float lambda = m.getParameter(VARIABLE_L) / 3;
+    float lambda = m.getParameter(VARIABLE_L);
     C.at(0).at(0) += -lambda / 3;
     C.at(0).at(1) += lambda / 3;
     C.at(1).at(0) += -lambda / 3;
@@ -29,7 +29,7 @@ void createLocalC(Matrix &C, mesh m)
 void createLocalD(Matrix &D, mesh m)
 {
     float l = m.getParameter(ELEMENT_LENGTH);
-    float v = m.getParameter(VARIABLE_V) / l;
+    float v = m.getParameter(VARIABLE_V);
     D.at(0).at(0) += v / l;
     D.at(0).at(1) += -v / l;
     D.at(1).at(0) += -v / l;

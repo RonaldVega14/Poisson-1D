@@ -35,13 +35,13 @@ int main()
 
     showMatrix(K);
 
-    zeroes(T, b.size());
+    // zeroes(T, b.size());
 
-    calculate(K, b, T);
+    // calculate(K, b, T);
 
-    cout << "LA RESPUESTA ES: \n";
+    // cout << "LA RESPUESTA ES: \n";
 
-    showVector(T);
+    // showVector(T);
 
     return 0;
 }
